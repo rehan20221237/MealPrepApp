@@ -8,6 +8,7 @@ import com.example.mealprepapp.ui.AddMealsScreen
 import com.example.mealprepapp.ui.MainScreen
 import com.example.mealprepapp.ui.SearchByIngredientScreen
 import com.example.mealprepapp.ui.SearchMealsScreen
+import com.example.mealprepapp.ui.WebSearchScreen
 
 @Composable
 fun AppNavGraph() {
@@ -24,10 +25,13 @@ fun AppNavGraph() {
             AddMealsScreen()
         }
         composable(Screen.SearchIngredient.route) {
-            SearchByIngredientScreen()
+            SearchMealsScreen()
         }
         composable(Screen.SearchMeals.route) {
-            SearchMealsScreen()
+            SearchByIngredientScreen()
+        }
+        composable(Screen.WebSearch.route) {
+            WebSearchScreen()
         }
     }
 }

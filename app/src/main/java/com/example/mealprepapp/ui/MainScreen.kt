@@ -75,6 +75,15 @@ fun MainScreen(navController: NavController) {
                 Text("Search for Meals")
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = {navController.navigate(Screen.WebSearch.route) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Web Search")
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(

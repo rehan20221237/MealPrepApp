@@ -1,6 +1,7 @@
 package com.example.mealprepapp.ui
 
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,6 +58,18 @@ fun SearchMealsScreen() {
             }
         ) {
             Text("Search")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = {
+                viewModel.saveApiMealsToDatabase()
+                Toast.makeText(context, "API meals saved to database", Toast.LENGTH_SHORT).show()
+            },
+            enabled = viewModel.apiMeals.value.isNotEmpty()
+        ) {
+            Text("Save to Database")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
