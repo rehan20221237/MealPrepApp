@@ -1,121 +1,128 @@
 package com.example.mealprepapp.ui
 
-import android.app.Application
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mealprepapp.navigation.Screen
-import com.example.mealprepapp.viewmodel.MealViewModel
 
 @Composable
 fun MainScreen(navController: NavController) {
-    val context = LocalContext.current
-    val viewModel = remember {
-        MealViewModel(context.applicationContext as Application)
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.loadMeals()
-    }
-
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                            MaterialTheme.colorScheme.background
+                        )
+                    )
+                )
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
-            Text(
-                text = "Meal Prep App",
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = { navController.navigate(Screen.AddMeals.route) },
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
-                Text("Add Meals to DB")
-            }
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            Button(
-                onClick = { navController.navigate(Screen.SearchIngredient.route) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Search for Meals By Ingredient")
-            }
+                Text(
+                    text = "Meal Prep App",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
-            Button(
-                onClick = { navController.navigate(Screen.SearchMeals.route) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Search for Meals")
-            }
+                Text(
+                    text = "Choose an option to continue",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = FontFamily.SansSerif,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(36.dp))
 
-            Button(
-                onClick = {navController.navigate(Screen.WebSearch.route) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Web Search")
-            }
+                HomeButton(
+                    text = "Add Meals to DB",
+                    onClick = { navController.navigate(Screen.AddMeals.route) }
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
-            Text(
-                text = "Meals in Database",
-                style = MaterialTheme.typography.titleMedium
-            )
+                HomeButton(
+                    text = "Search for Meals By Ingredient",
+                    onClick = { navController.navigate(Screen.SearchIngredient.route) }
+                )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
-            if (viewModel.meals.value.isEmpty()) {
-                Text("No meals added yet")
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(viewModel.meals.value) { meal ->
-                        Column {
-                            Text(
-                                text = meal.strMeal ?: "Unnamed Meal",
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                            Text(
-                                text = "Category: ${meal.strCategory ?: "N/A"}"
-                            )
-                            Text(
-                                text = "Area: ${meal.strArea ?: "N/A"}"
-                            )
-                        }
-                    }
-                }
+                HomeButton(
+                    text = "Search for Meals",
+                    onClick = { navController.navigate(Screen.SearchMeals.route) }
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                HomeButton(
+                    text = "Web Search",
+                    onClick = { navController.navigate(Screen.WebSearch.route) }
+                )
             }
         }
+    }
+}
+
+@Composable
+fun HomeButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(58.dp),
+        shape = RoundedCornerShape(18.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = FontFamily.SansSerif
+        )
     }
 }
